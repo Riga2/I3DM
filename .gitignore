@@ -1,0 +1,9 @@
+__pycache__
+trained_models/
+wandb/
+LVSM/checkpoints/
+LVSM/experiments/
+LVSM/configs/api_keys.yaml
+results/
+I3DM.egg-info/
+scripts/extern/pytorch3d/

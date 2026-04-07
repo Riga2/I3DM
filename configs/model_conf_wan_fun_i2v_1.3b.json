@@ -1,0 +1,6 @@
+[
+    "/mnt/afse2/MODEL/PAI/Wan2.1-Fun-V1.1-1.3B-Control-Camera/diffusion_pytorch_model.safetensors",
+    "/mnt/afse2/MODEL/PAI/Wan2.1-Fun-V1.1-1.3B-Control-Camera/models_clip_open-clip-xlm-roberta-large-vit-huge-14.pth",
+    "/mnt/afse2/MODEL/PAI/Wan2.1-Fun-V1.1-1.3B-Control-Camera/models_t5_umt5-xxl-enc-bf16.pth",
+    "/mnt/afse2/MODEL/PAI/Wan2.1-Fun-V1.1-1.3B-Control-Camera/Wan2.1_VAE.pth"
+]

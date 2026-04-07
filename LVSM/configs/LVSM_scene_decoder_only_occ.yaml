@@ -1,0 +1,90 @@
+model:
+  class_name: model.LVSM_scene_decoder_only_occ.Images2LatentScene
+
+  image_tokenizer:
+    image_size: 256
+    image_size_H: 256
+    image_size_W: 256
+    patch_size: 8
+    in_channels: 9  # 3 RGB + 3 direction + 3 Reference
+
+  target_pose_tokenizer:
+    image_size: 256
+    image_size_H: 256
+    image_size_W: 256
+    patch_size: 8
+    in_channels: 6  # 3 direction + 3 Reference
+
+  transformer:
+    d: 768
+    d_head: 64
+    n_layer: 24
+    special_init: true
+    depth_init: true
+    use_qk_norm: true
+
+training:
+  amp_dtype: bf16
+  api_key_path: ./configs/api_keys.yaml
+  batch_size_per_gpu: 16
+  beta1: 0.9
+  beta2: 0.95
+  allowed_gradnorm_factor: 5
+  scene_scale_factor: 1.35
+  checkpoint_dir: ./experiments/checkpoints/LVSM_scene_decoder_only_occ_Layer6
+  checkpoint_every: 1000
+  dataset_name: data.dataset_scene_occ.Dataset
+  dataset_path: /mnt/afse2/DATASET/re10k_preprocessed/train/full_list_F33.txt
+  grad_accum_steps: 1
+  grad_checkpoint_every: 1
+  grad_clip_norm: 0.0
+
+  l2_loss_weight: 0.0
+  lpips_loss_weight: 0.0
+  perceptual_loss_weight: 0.0 # more focus on L2 loss
+  conf_loss_weight: 0.0
+
+  load_pretrained: True
+  pretrained_ckpt_path: ./checkpoints/scene_decoder_only_256.pt
+  
+  lr: 0.00005
+  train_steps: 100000
+
+
+  num_input_views: 2
+  num_target_views: 8
+  num_threads: 8
+  num_views: 10
+  num_workers: 4
+  prefetch_factor: 32
+  print_every: 10
+
+  square_crop: true
+  use_amp: true
+  use_tf32: true
+  view_selector:
+    max_frame_dist: 400
+    min_frame_dist: 64
+  vis_every: 500
+  wandb_exp_name: LVSM_scene_decoder_only_occ_Layer6
+  wandb_log_every: 10
+  wandb_mode: offline
+
+  wandb_project: LVSM_minecraft
+  warmup: 3000
+  weight_decay: 0.05
+
+
+# inference / evaluation
+inference:
+  if_inference: False
+  compute_metrics: False
+  view_idx_file_path: ./data/evaluation_index_re10k.json
+  render_video: False
+  render_video_config:
+    traj_type: interpolate
+    num_frames: 60
+    loop_video: True 
+    order_poses: False
+
+  
