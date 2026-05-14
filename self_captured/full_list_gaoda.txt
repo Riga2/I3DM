@@ -1,1 +1,1 @@
-/mnt/afse2/jiali/DiffSynth-Studio/self_videos/metadata/gaoda_new.json
+/mnt/afse2/jiali/I3DM/self_captured/metadata/gaoda.json

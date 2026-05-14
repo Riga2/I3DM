@@ -10,6 +10,7 @@ from base_diffsynth.pipelines.wan_video_mem_new import WanVideoPipeline, ModelCo
 from modelscope import dataset_snapshot_download
 import json
 from frame_memory_retrieval_optimized import KeyFrameMemoryBankLearnedOccRetrieval
+from frame_memory_retrieval_learned_fast import KeyFrameMemoryBankLearnedOccRetrievalFast
 
 from torchvision.utils import save_image
 from tqdm import tqdm
@@ -284,7 +285,7 @@ pipe.load_state_dict(other_state_dict, strict=False)
 pipe.enable_vram_management()
 
 
-base_results_dir = './results/Keyframes_SceneDec_ft_s11000_L0_occSelect_allTime_all_wNeg'
+base_results_dir = './results/performance_test_fulloptimized'
 if accelerator.is_main_process:
     os.makedirs(base_results_dir, exist_ok=True)
 
@@ -297,7 +298,17 @@ test_dataloader = test_data_loader(
 ctx_st, ctx_ed = 7, 11
 ctx_len = ctx_ed - ctx_st
 num_per_clip = 77
-mem_bank = KeyFrameMemoryBankLearnedOccRetrieval(n_sample_points=100000)
+retrieval_impl = os.environ.get("I3DM_RETRIEVAL_IMPL", "fast").lower()
+if retrieval_impl in {"fast", "full_optimized"}:
+    mem_bank = KeyFrameMemoryBankLearnedOccRetrievalFast(
+        n_sample_points=100000,
+        candidate_pool_size=int(os.environ.get("I3DM_RETRIEVAL_CANDIDATE_POOL", "64")),
+        proposal_points=int(os.environ.get("I3DM_RETRIEVAL_PROPOSAL_POINTS", "8192")),
+        always_include_recent=int(os.environ.get("I3DM_RETRIEVAL_RECENT", "8")),
+        learned_batch_size=int(os.environ.get("I3DM_RETRIEVAL_BATCH_SIZE", "32")),
+    )
+else:
+    mem_bank = KeyFrameMemoryBankLearnedOccRetrieval(n_sample_points=100000)
 # all_scene_acc_retrieval_time = 0.0
 # all_scene_gen_time = 0.0
 all_scene_avg_clip_retrieval_time = 0.0
@@ -376,21 +387,51 @@ for data in tqdm(test_dataloader):
         # )
 
         start_time = time.time()
-        retrieved_result = mem_bank.retrieve_camera_occ_perf_test(
-        # retrieved_result, retrieved_ratios = mem_bank.retrieve_top_k_cameras(
-        # retrieved_result = mem_bank.random_retrieve(
-        # retrieved_result = mem_bank.latest_retrieve(
-        # retrieved_result = mem_bank.retrieve_top_k_cameras_fov_optimized(
-        # retrieved_result = mem_bank.retrieve_top_k_cameras(
-            query_c2w=cur_traj[::4],
-            query_fxfycxcy=cur_fxfycxcy[::4],
-            k=ctx_len,
-        )
+        if retrieval_impl == "fast":
+            retrieved_result, retrieval_profile = mem_bank.retrieve_camera_occ_fast(
+                query_c2w=cur_traj[::4],
+                query_fxfycxcy=cur_fxfycxcy[::4],
+                k=ctx_len,
+                return_profile=True,
+            )
+        elif retrieval_impl == "full_optimized":
+            retrieved_result, retrieval_profile = mem_bank.retrieve_camera_occ_full_optimized(
+                query_c2w=cur_traj[::4],
+                query_fxfycxcy=cur_fxfycxcy[::4],
+                k=ctx_len,
+                return_profile=True,
+            )
+        else:
+            retrieved_result = mem_bank.retrieve_camera_occ_perf_test(
+            # retrieved_result, retrieved_ratios = mem_bank.retrieve_top_k_cameras(
+            # retrieved_result = mem_bank.random_retrieve(
+            # retrieved_result = mem_bank.latest_retrieve(
+            # retrieved_result = mem_bank.retrieve_top_k_cameras_fov_optimized(
+            # retrieved_result = mem_bank.retrieve_top_k_cameras(
+                query_c2w=cur_traj[::4],
+                query_fxfycxcy=cur_fxfycxcy[::4],
+                k=ctx_len,
+            )
+            retrieval_profile = {
+                "memory_size": mem_bank.frames_num,
+                "proposal_candidates": mem_bank.frames_num - 1,
+                "proposal_time": 0.0,
+                "learned_time": 0.0,
+                "selection_time": 0.0,
+            }
         
         retrieved_data = mem_bank.get_retrieved_data_frames(retrieved_result)
         torch.cuda.synchronize()
         retrieve_time_cost = time.time() - start_time
         print(f"Clip {count} retrieval time cost: {retrieve_time_cost:.4f} seconds.")
+        print(
+            "Retrieval profile: "
+            f"memory={retrieval_profile.get('memory_size', mem_bank.frames_num)}, "
+            f"candidates={retrieval_profile.get('proposal_candidates', 0)}, "
+            f"proposal={retrieval_profile.get('proposal_time', 0.0):.4f}s, "
+            f"learned={retrieval_profile.get('learned_time', 0.0):.4f}s, "
+            f"selection={retrieval_profile.get('selection_time', 0.0):.4f}s"
+        )
 
 
         union_c2ws = torch.cat([retrieved_data['frames_c2ws'], cur_traj[::4]], dim=0)

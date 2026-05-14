@@ -2,7 +2,7 @@
     "scene_name": "mosu",
     "frames": [
         {
-            "image_path": "/mnt/afse2/jiali/DiffSynth-Studio/self_videos/images/mosu/00000.png",
+            "image_path": "/mnt/afse2/jiali/I3DM/self_captured/images/mosu/00000.png",
             "fxfycxcy": [
                 310.5302734375,
                 310.5302734375,
@@ -37,7 +37,7 @@
             ]
         },
         {
-            "image_path": "/mnt/afse2/jiali/DiffSynth-Studio/self_videos/images/mosu/00001.png",
+            "image_path": "/mnt/afse2/jiali/I3DM/self_captured/images/mosu/00001.png",
             "fxfycxcy": [
                 310.775146484375,
                 310.775146484375,
@@ -72,7 +72,7 @@
             ]
         },
         {
-            "image_path": "/mnt/afse2/jiali/DiffSynth-Studio/self_videos/images/mosu/00002.png",
+            "image_path": "/mnt/afse2/jiali/I3DM/self_captured/images/mosu/00002.png",
             "fxfycxcy": [
                 310.33673095703125,
                 310.33673095703125,
@@ -107,7 +107,7 @@
             ]
         },
         {
-            "image_path": "/mnt/afse2/jiali/DiffSynth-Studio/self_videos/images/mosu/00003.png",
+            "image_path": "/mnt/afse2/jiali/I3DM/self_captured/images/mosu/00003.png",
             "fxfycxcy": [
                 310.4349670410156,
                 310.4349670410156,
