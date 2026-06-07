@@ -42,7 +42,7 @@ hf download yiren-lu/re10k_pixelsplat \
 python process_data.py --base_path YOUR_RAW_DATAPATH --output_dir YOUR_PROCESSED_DATAPATH --mode 'test'
 ```
 
-## Inference on Re10K (200 samples)
+## Inference on Re10K
 ``` sh
 # eval using 4 GPUs (RTX 4090 is okay)
 # replace YOUR_PROCESSED_DATAPATH with the dir you created above
