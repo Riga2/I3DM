@@ -7,3 +7,4 @@ LVSM/configs/api_keys.yaml
 results/
 I3DM.egg-info/
 scripts/extern/pytorch3d/
+.vscode/

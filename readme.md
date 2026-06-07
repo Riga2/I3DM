@@ -1,10 +1,10 @@
-## I3DM: Implicit 3D-aware Memory Retrieval and Injection for Consistent Video Scene Generation
+# I3DM: Implicit 3D-aware Memory Retrieval and Injection for Consistent Video Scene Generation
 
-### [Paper](https://arxiv.org/abs/2603.23413) | [Project page](https://riga2.github.io/i3dm/)
+## [Paper](https://arxiv.org/abs/2603.23413) | [Project page](https://riga2.github.io/i3dm/)
 
 ![Teaser](user-imgs/teaser.png)
 
-### Installation
+## Installation
 ``` sh
 git clone https://github.com/Riga2/I3DM.git
 cd I3DM
@@ -16,7 +16,7 @@ pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https
 pip install -e .
 ```
 
-### Models
+## Models
 ``` sh
 # download the base model
 mkdir your_base_model_dir
@@ -29,7 +29,7 @@ mkdir ./trained_models
 hf download Riga27527/I3DM --local-dir=./trained_models
 ```
 
-### Download Re10K test data
+## Download Re10K test data
 ``` sh
 mkdir -p YOUR_RAW_DATAPATH
 mkdir -p YOUR_PROCESSED_DATAPATH
@@ -42,7 +42,7 @@ hf download yiren-lu/re10k_pixelsplat \
 python process_data.py --base_path YOUR_RAW_DATAPATH --output_dir YOUR_PROCESSED_DATAPATH --mode 'test'
 ```
 
-### Inference on Re10K (200 samples)
+## Inference on Re10K (200 samples)
 ``` sh
 # eval using 4 GPUs (RTX 4090 is okay)
 # replace YOUR_PROCESSED_DATAPATH with the dir you created above
@@ -53,7 +53,7 @@ accelerate launch --num_processes=4 scripts/eval_re10k.py \
   --retrieval-ckpt-path ./trained_models/ckpt_0000000000016000.pt
 ```
 
-### Training
+## Training
 Step 1: Download and process re10K training data.
 ``` sh
 hf download yiren-lu/re10k_pixelsplat \
@@ -100,7 +100,7 @@ sh scripts/train.sh \
   --dataset_caption_path YOUR_PROCESSED_DATAPATH/train/caption_F77/video_captions_refined.json
 ```
 
-### Citation
+## Citation
 If you find this repository useful in your project, please cite the following work. :)
 ```
 @article{li2026i3dm,
@@ -111,7 +111,7 @@ If you find this repository useful in your project, please cite the following wo
 }
 ```
 
-### Acknowledgments
+## Acknowledgments
 We borrow heavily from the following repositories. Many thanks to the authors for sharing their codes.
 - [DiffSynth-Studio](https://github.com/modelscope/diffsynth-studio)
 - [LVSM](https://github.com/haian-jin/LVSM)
