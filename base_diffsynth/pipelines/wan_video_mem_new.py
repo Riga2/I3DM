@@ -55,7 +55,7 @@ class WanVideoPipeline(BasePipeline):
         self.vap: MotWanModel = None
         self.animate_adapter: WanAnimateAdapter = None
 
-        scene_decoder_only_ckpt = './trained_models/LVSM/LVSM_F4.pt'
+        scene_decoder_only_ckpt = './trained_models/LVSM_F4.pt'
         self.nvs_model = SceneDecoderOnly(load_path=scene_decoder_only_ckpt).to(device=device, dtype=torch_dtype)
 
         # ref conv
@@ -70,28 +70,12 @@ class WanVideoPipeline(BasePipeline):
             WanVideoUnit_PromptEmbedder(),
             WanVideoUnit_InputVideoEmbedder(),
             WanVideoUnit_SceneNVSModel(),
-            # WanVideoUnit_SceneTokenDecoder(),
-            # WanVideoUnit_SceneTokenEncoderDecoder(),
-            # WanVideoUnit_NVSInpaintVAE(),
-            # WanVideoUnit_ImageEmbedderVAE(),
-            # WanVideoUnit_ImageEmbedderCLIP(),
-            # WanVideoUnit_ImageEmbedderFused(),
-            # WanVideoUnit_FunControl(),
-            # WanVideoUnit_FunReference(),
             WanVideoUnit_FunReferenceNew(),
             WanVideoUnit_FunCameraControl_Plucker(),
-            # WanVideoUnit_FunCameraControl(),
-            # WanVideoUnit_SpeedControl(),
-            # WanVideoUnit_VACE(),
-            # WanVideoPostUnit_AnimateVideoSplit(),
-            # WanVideoPostUnit_AnimatePoseLatents(),
-            # WanVideoPostUnit_AnimateFacePixelValues(),
-            # WanVideoPostUnit_AnimateInpaint(),
             WanVideoUnit_VAP(),
             WanVideoUnit_UnifiedSequenceParallel(),
             WanVideoUnit_TeaCache(),
             WanVideoUnit_CfgMerger(),
-            # WanVideoUnit_LongCatVideo(),
         ]
         self.post_units = [
             WanVideoPostUnit_S2V(),
@@ -1117,27 +1101,6 @@ class WanVideoUnit_FunCameraControl_Plucker(PipelineUnit):
     
         return {"control_camera_latents_input": control_camera_latents_input}
         
-        # input_latents = pipe.preprocess_video_tensor(input_image[None]) # B,C,1,H,W
-        # input_latents = pipe.vae.encode(input_latents, device=pipe.device)
-        # y = torch.zeros_like(latents).to(pipe.device)
-        # y[:, :, :1] = input_latents
-        # y = y.to(dtype=pipe.torch_dtype, device=pipe.device)
-
-        # # if y.shape[1] != pipe.dit.in_dim - latents.shape[1]:
-        # #     image = pipe.preprocess_image(input_image.resize((width, height))).to(pipe.device)
-        # #     vae_input = torch.concat([image.transpose(0, 1), torch.zeros(3, num_frames-1, height, width).to(image.device)], dim=1)
-        # #     y = pipe.vae.encode([vae_input.to(dtype=pipe.torch_dtype, device=pipe.device)], device=pipe.device, tiled=tiled, tile_size=tile_size, tile_stride=tile_stride)[0]
-        # #     y = y.to(dtype=pipe.torch_dtype, device=pipe.device)
-        # #     msk = torch.ones(1, num_frames, height//8, width//8, device=pipe.device)
-        # #     msk[:, 1:] = 0
-        # #     msk = torch.concat([torch.repeat_interleave(msk[:, 0:1], repeats=4, dim=1), msk[:, 1:]], dim=1)
-        # #     msk = msk.view(1, msk.shape[1] // 4, 4, height//8, width//8)
-        # #     msk = msk.transpose(1, 2)[0]
-        # #     y = torch.cat([msk,y])
-        # #     y = y.unsqueeze(0)
-        # #     y = y.to(dtype=pipe.torch_dtype, device=pipe.device)
-        # return {"control_camera_latents_input": control_camera_latents_input, "y": y}
-
 
 class WanVideoUnit_FunCameraControl(PipelineUnit):
     def __init__(self):

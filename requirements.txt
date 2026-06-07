@@ -41,7 +41,6 @@ decorator==5.2.1
 decord==0.6.0
 deepspeed==0.18.3
 defusedxml==0.7.1
-# diffsynth @ git+https://github.com/modelscope/DiffSynth-Studio.git@afd101f3452c9ecae0c87b79adfa2e22d65ffdc3
 easydict==1.13
 einops==0.8.1
 embreex==2.17.7.post7
@@ -209,7 +208,6 @@ python-json-logger==4.0.0
 python-multipart==0.0.22
 pytorch-fid==0.3.0
 pytorch-lightning==2.6.0
-# pytorch3d @ ./scripts/extern/pytorch3d
 pytz==2025.2
 PyYAML==6.0.3
 pyzmq==27.1.0

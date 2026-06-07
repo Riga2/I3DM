@@ -34,7 +34,7 @@ training:
   checkpoint_dir: ./experiments/checkpoints/LVSM_scene_decoder_only_occ_Layer6
   checkpoint_every: 1000
   dataset_name: data.dataset_scene_occ.Dataset
-  dataset_path: /mnt/afse2/DATASET/re10k_preprocessed/train/full_list_F33.txt
+  dataset_path: /mnt/afse2/DATASET/re10k_preprocessed/train/full_list.txt
   grad_accum_steps: 1
   grad_checkpoint_every: 1
   grad_clip_norm: 0.0
@@ -70,7 +70,7 @@ training:
   wandb_log_every: 10
   wandb_mode: offline
 
-  wandb_project: LVSM_minecraft
+  wandb_project: LVSM
   warmup: 3000
   weight_decay: 0.05
 

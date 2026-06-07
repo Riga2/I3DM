@@ -172,11 +172,12 @@ class BasePipeline(torch.nn.Module):
 
     def freeze_except_new(self, module_name_substrings):
         """
-        递归地冻结模型中的所有参数，除了那些模块名称包含在 module_name_substrings 列表中的参数。
+        Freeze all model parameters recursively, except parameters whose module names contain
+        one of the entries in module_name_substrings.
 
-        参数:
-            module_name_substrings (List[str]): 模块名称的子字符串列表，匹配到的模块将被设置为可训练。
-                                                例如：['dit.control_adapter', 'head']
+        Args:
+            module_name_substrings (List[str]): Module-name substrings. Matching modules are set trainable,
+                for example ['dit.control_adapter', 'head'].
         """
         for name, param in self.named_parameters():
             param.requires_grad_(False)
@@ -205,11 +206,12 @@ class BasePipeline(torch.nn.Module):
 
     def add_extra_trainable_module(self, module_name_substrings):
         """
-        递归地冻结模型中的所有参数，除了那些模块名称包含在 module_name_substrings 列表中的参数。
+        Freeze all model parameters recursively, except parameters whose module names contain
+        one of the entries in module_name_substrings.
 
-        参数:
-            module_name_substrings (List[str]): 模块名称的子字符串列表，匹配到的模块将被设置为可训练。
-                                                例如：['dit.control_adapter', 'head']
+        Args:
+            module_name_substrings (List[str]): Module-name substrings. Matching modules are set trainable,
+                for example ['dit.control_adapter', 'head'].
         """
         for name, param in self.named_parameters():
             should_be_kept_trainable = any(sub in name for sub in module_name_substrings)

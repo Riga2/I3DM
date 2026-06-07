@@ -495,9 +495,9 @@ class SceneDecoderOnlyOccAnalysis(nn.Module):
     def pass_layers(self, input_tokens, start_layer=0, end_layer=None, gradient_checkpoint=False, checkpoint_every=1):
         """
         Args:
-            input_tokens: 输入的 tokens
-            start_layer: 开始执行的层索引
-            end_layer: 结束执行的层索引（不包含）
+            input_tokens: input tokens
+            start_layer: first layer index to execute
+            end_layer: exclusive last layer index to execute
         """
         num_layers = len(self.transformer_blocks)
         if end_layer is None:

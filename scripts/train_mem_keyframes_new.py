@@ -6,7 +6,7 @@ import torch
 from base_diffsynth import load_state_dict
 from base_diffsynth.pipelines.wan_video_mem_new import WanVideoPipeline, ModelConfig
 from base_diffsynth.trainers.utils import DiffusionTrainingModule, ModelLogger, WandBModelLogger, launch_training_task, wan_parser
-from base_diffsynth.trainers.unified_dataset import UnifiedDatasetRe10K_Keyframes, UnifiedDatasetRe10K_Keyframes_121
+from base_diffsynth.trainers.unified_dataset import UnifiedDatasetRe10K_Keyframes
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 import random
@@ -126,6 +126,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     dataset = UnifiedDatasetRe10K_Keyframes(
         metadata_path=args.dataset_metadata_path,
+        caption_path=args.dataset_caption_path,
         repeat=args.dataset_repeat,
     )
     model = WanTrainingModule(
