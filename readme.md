@@ -26,7 +26,7 @@ hf download alibaba-pai/Wan2.1-Fun-V1.1-1.3B-Control-Camera --local-dir=your_bas
 
 # download the finetuned models
 mkdir ./trained_models
-hf download Riga27527/I3DM --local-dir=./trained_models
+hf download JerryLee123/I3DM --local-dir=./trained_models
 ```
 
 ## Download Re10K test data
